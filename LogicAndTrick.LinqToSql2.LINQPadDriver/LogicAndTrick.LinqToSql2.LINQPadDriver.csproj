@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+	
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.0;net46</TargetFrameworks>
+		<UseWpf>true</UseWpf>
+		<AssemblyName>LogicAndTrick.LinqToSQL2.LINQPadDriver</AssemblyName>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<PackageTags>linqpaddriver linq-to-sql</PackageTags>
+		<Description>This driver allows you to use your custom typed LINQ to SQL assembly, instead of LINQPad generating one based on your database schema. It works with all compatible versions of LINQ to SQL, including the official .NET Framework version and the LinqToSQL2 port to .NET Standard.</Description>
+		<Copyright>2020 LogicAndTrick</Copyright>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/LogicAndTrick/linqtosql-linqpad-driver</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/LogicAndTrick/linqtosql-linqpad-driver</RepositoryUrl>
+		<RepositoryType>Git</RepositoryType>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+		<DefineConstants>NETCORE</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="LINQPad.Reference" Version="1.1.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+		<Reference Include="System.Xaml">
+			<RequiredTargetFramework>4.0</RequiredTargetFramework>
+		</Reference>
+		<Reference Include="WindowsBase" />
+		<Reference Include="PresentationCore" />
+		<Reference Include="PresentationFramework" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="ConnectionDialog.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</None>
+	</ItemGroup>	
+
+	<Target Name="PostBuild1" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+		<Exec Command="xcopy /i/y/s &quot;$(TargetDir)*.*&quot; &quot;%25LocalAppData%25\\LINQPad\\Drivers\\DataContext\\NetCore\\$(TargetName)&quot;" />
+	</Target>
+
+	<Target Name="PostBuild2" AfterTargets="PostBuildEvent" Condition="'$(TargetFramework)' == 'net46'">
+		<Exec Command="xcopy /i/y/s &quot;$(TargetDir)*.*&quot; &quot;%25LocalAppData%25\\LINQPad\\Drivers\\DataContext\\4.6\\$(TargetName) (no-strong-name)&quot;" />
+	</Target>
+
+</Project>
