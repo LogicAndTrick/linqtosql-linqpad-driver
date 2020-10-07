@@ -68,6 +68,9 @@
             <CheckBox IsChecked="{Binding ConnectionInfo.IsProduction}" VerticalAlignment="Center">Contains production data</CheckBox>
         </DockPanel>
 
+        <Label Padding="0,10,0,2">Friendly name for this connection (optional):</Label>
+        <TextBox Name="TxtFriendlyName" Padding="2" Text="{Binding ConnectionInfo.DisplayName}" />
+
         <DockPanel LastChildFill="False" Margin="0,15,0,0">
 			<Button Name="BtnCancel" DockPanel.Dock="Right" Content="Cancel" Margin="6,0,0,0" Padding="10,3" MinWidth="90" IsCancel="True" TabIndex="3" />
             <Button Name="BtnOk" DockPanel.Dock="Right" Content="OK" Margin="6,0,0,0" Padding="10,3" MinWidth="90" IsDefault="True" TabIndex="2" Click="ClickOk" />
