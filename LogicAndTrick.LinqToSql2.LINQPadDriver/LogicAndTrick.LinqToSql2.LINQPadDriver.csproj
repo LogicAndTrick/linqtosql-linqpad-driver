@@ -4,6 +4,7 @@
 		<TargetFrameworks>netcoreapp3.0;net46</TargetFrameworks>
 		<UseWpf>true</UseWpf>
 		<AssemblyName>LogicAndTrick.LinqToSQL2.LINQPadDriver</AssemblyName>
+		<Title>Typed LINQ to SQL Driver for LINQPad 6</Title>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<PackageTags>linqpaddriver linq-to-sql</PackageTags>
 		<Description>This driver allows you to use your custom typed LINQ to SQL assembly, instead of LINQPad generating one based on your database schema. It works with all compatible versions of LINQ to SQL, including the official .NET Framework version and the LinqToSQL2 port to .NET Standard.</Description>
@@ -13,6 +14,7 @@
 		<RepositoryUrl>https://github.com/LogicAndTrick/linqtosql-linqpad-driver</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<Authors>LogicAndTrick</Authors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
