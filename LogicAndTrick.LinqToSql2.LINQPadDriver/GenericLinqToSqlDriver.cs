@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using LINQPad;
 using LINQPad.Extensibility.DataContext;
+using LogicAndTrick.LinqToSql2.LINQPadDriver;
 
 namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
 {
@@ -36,11 +38,30 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
             };
         }
 
+        public override void InitializeContext(IConnectionInfo cxInfo, object context, QueryExecutionManager executionManager)
+        {
+            if (executionManager.SqlTranslationWriter == null || !ExecutionEngine.SqlTranslationsEnabled) return;
+            var logger = new QueryLogger(executionManager.SqlTranslationWriter);
+            try
+            {
+                // If we're using Albahari's fork, then we can use the more reliable CommandExecuting hook
+                Action<IDbCommand> log = logger.FormatCommand;
+                var currentType = context.GetType();
+                while (currentType.Namespace != "System.Data.Linq") currentType = currentType.BaseType;
+                currentType.Assembly.GetType("System.Data.Linq.DbEngines.SqlServer.SqlProvider")
+                    .GetField("CommandExecuting", BindingFlags.Static | BindingFlags.Public)
+                    .SetValue(null, log);
+            }
+            catch
+            {
+                // If that doesn't work, drop back to the default DataContext Log method
+                context.GetType().GetProperty("Log").SetValue(context, logger);
+            }
+        }
+
         public override IEnumerable<string> GetAssembliesToAdd(IConnectionInfo cxInfo) => new[]
         {
-            "SD.Tools.LinqToSQL2.dll",
-            "System.Data.SqlClient.dll",
-            "Microsoft.SqlServer.Types.dll"
+            "*"
         };
 
         public override IEnumerable<string> GetNamespacesToAdd(IConnectionInfo cxInfo) => new string[3]
