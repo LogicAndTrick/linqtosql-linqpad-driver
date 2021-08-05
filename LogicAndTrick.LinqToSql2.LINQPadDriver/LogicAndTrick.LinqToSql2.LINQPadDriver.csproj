@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://github.com/LogicAndTrick/linqtosql-linqpad-driver</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/LogicAndTrick/linqtosql-linqpad-driver</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
-		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<PackageReleaseNotes>Properly support sql date values, target netcore3.1</PackageReleaseNotes>
 		<Authors>LogicAndTrick</Authors>
 		<AssemblyVersion>1.1.0.0</AssemblyVersion>
 		<FileVersion>1.1.0.0</FileVersion>
