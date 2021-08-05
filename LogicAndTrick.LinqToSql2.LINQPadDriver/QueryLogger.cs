@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -141,6 +142,9 @@ namespace LogicAndTrick.LinqToSql2.LINQPadDriver
                                 break;
                             case DateTimeOffset dto:
                                 formatValue = "'" + dto.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+                                break;
+                            case SqlDateTime sdt:
+                                formatValue = "'" + sdt.Value.ToString(par.SqlDbType == SqlDbType.Date ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss.fff") + "'";
                                 break;
                             default:
                                 formatValue = "NULL";
