@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Globalization;
@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using LINQPad;
 using DateTime = System.DateTime;
 
-namespace LogicAndTrick.LinqToSql2.LINQPadDriver
+namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
 {
     public class QueryLogger : TextWriter
     {
@@ -61,7 +61,7 @@ namespace LogicAndTrick.LinqToSql2.LINQPadDriver
 
         public void FormatCommand(IDbCommand cmd)
         {
-#if NETCORE
+#if NETCOREAPP
             ExecutionEngine.CurrentlyExecutingCommand = cmd;
 #endif
             if (!ExecutionEngine.SqlTranslationsEnabled) return;
@@ -138,13 +138,13 @@ namespace LogicAndTrick.LinqToSql2.LINQPadDriver
                         switch (par.SqlValue)
                         {
                             case DateTime dt:
-                                formatValue = "'" + dt.ToString(par.SqlDbType == SqlDbType.Date ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss.fff") + "'";
+                                formatValue = "'" + dt.ToString(par.SqlDbType == SqlDbType.Date ? "yyyyMMdd" : "yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                                 break;
                             case DateTimeOffset dto:
-                                formatValue = "'" + dto.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+                                formatValue = "'" + dto.ToString("yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                                 break;
                             case SqlDateTime sdt:
-                                formatValue = "'" + sdt.Value.ToString(par.SqlDbType == SqlDbType.Date ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss.fff") + "'";
+                                formatValue = "'" + sdt.Value.ToString(par.SqlDbType == SqlDbType.Date ? "yyyyMMdd" : "yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                                 break;
                             default:
                                 formatValue = "NULL";
@@ -244,11 +244,11 @@ namespace LogicAndTrick.LinqToSql2.LINQPadDriver
                     case "DATETIME":
                     case "SMALLDATETIME":
                     case "DATETIME2":
-                        if (DateTime.TryParse(value, out var dt)) formatValue = "'" + dt.ToString(type == "DATE" ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm:ss.fff") + "'";
+                        if (DateTime.TryParse(value, out var dt)) formatValue = "'" + dt.ToString(type == "DATE" ? "yyyyMMdd" : "yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                         else formatValue = "'" + value.Replace("'", "''") + "'";
                         break;
                     case "DATETIMEOFFSET":
-                        if (DateTime.TryParse(value, out var dateTimeOffset)) formatValue = "'" + dateTimeOffset.ToString("yyyy-MM-dd HH:mm:ss.fff") + "'";
+                        if (DateTime.TryParse(value, out var dateTimeOffset)) formatValue = "'" + dateTimeOffset.ToString("yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                         else formatValue = "'" + value.Replace("'", "''") + "'";
                         break;
                     case "BINARY":

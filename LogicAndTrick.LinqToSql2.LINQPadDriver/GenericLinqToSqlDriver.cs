@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using LINQPad;
 using LINQPad.Extensibility.DataContext;
-using LogicAndTrick.LinqToSql2.LINQPadDriver;
 
 namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
 {
@@ -68,17 +67,17 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
         {
             "System.Data.Linq",
             "System.Data.Linq.SqlClient",
-            "System.Data.SqlClient"
+            "Microsoft.Data.SqlClient"
         };
 
         public override IDbConnection GetIDbConnection(IConnectionInfo cxInfo)
         {
-            return new SqlConnection(cxInfo.DatabaseInfo.GetCxString());
+            return new SqlConnection(cxInfo.GetConnectionString());
         }
 
         public override List<ExplorerItem> GetSchema(IConnectionInfo cxInfo, Type customType)
         {
-            return new ExplorerItem[0].ToList();
+            return Array.Empty<ExplorerItem>().ToList();
         }
 
         public override ICustomMemberProvider GetCustomDisplayMemberProvider(object objectToWrite)

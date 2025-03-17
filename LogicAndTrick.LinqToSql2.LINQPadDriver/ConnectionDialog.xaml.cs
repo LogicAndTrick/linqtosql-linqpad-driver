@@ -1,5 +1,5 @@
 using System;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.IO;
@@ -12,13 +12,11 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
 	{
         private readonly IConnectionInfo _cxInfo;
 
-		public ConnectionDialog (IConnectionInfo cxInfo)
+        public ConnectionDialog(IConnectionInfo cxInfo)
 		{
-			_cxInfo = cxInfo;
-			DataContext = new ConnectionProperties (cxInfo);
-
+            _cxInfo = cxInfo;
+            DataContext = new ConnectionProperties(cxInfo);
             InitializeComponent();
-
             TxtPassword.Password = _cxInfo.DatabaseInfo.Password;
         }
 
@@ -37,7 +35,7 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
             }
 		}
 
-        public void AutoChooseType()
+        private void AutoChooseType()
         {
             var assemPath = _cxInfo.CustomTypeInfo.CustomAssemblyPath;
             if (assemPath.Length == 0) return;
@@ -112,7 +110,7 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
 
         private int SelectOne()
         {
-            using (var connection = new SqlConnection(_cxInfo.DatabaseInfo.GetCxString()))
+            using (var connection = new SqlConnection(_cxInfo.GetConnectionString()))
             {
                 connection.Open();
                 using (var cmd = connection.CreateCommand())

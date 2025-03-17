@@ -1,11 +1,14 @@
 <Window x:Class="LogicAndTrick.LinqToSQL2.LINQPadDriver.ConnectionDialog"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	Title="Connection Details"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    xmlns:local="clr-namespace:LogicAndTrick.LinqToSQL2.LINQPadDriver"
+    Title="Connection Details"
 	Background="{x:Static SystemColors.ControlBrush}"
 	SizeToContent="Height"
-	Width="554" 
-	WindowStartupLocation="CenterScreen">
+	Width="650" 
+	WindowStartupLocation="CenterScreen"
+    d:DataContext="{d:DesignInstance local:ConnectionProperties}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
@@ -18,7 +21,7 @@
             </Label>
             <Label Padding="0,0,0,1">Path to custom assembly:</Label>
         </DockPanel>
-        <TextBox Name="TxtAssemblyPath" Padding="2" Margin="0,0,0,1" Text="{Binding ConnectionInfo.CustomTypeInfo.CustomAssemblyPath}"/>
+        <TextBox Padding="2" Margin="0,0,0,1" Text="{Binding CustomTypeInfo.CustomAssemblyPath}" />
 
         <DockPanel>
             <Label DockPanel.Dock="Right" Padding="1">
@@ -26,7 +29,7 @@
             </Label>
             <Label Padding="0,0,0,1">Full name of typed DataContext:</Label>
         </DockPanel>
-        <TextBox Name="TxtTypeName" Padding="2" Margin="0,0,0,1" Text="{Binding ConnectionInfo.CustomTypeInfo.CustomTypeName}"/>
+        <TextBox Padding="2" Margin="0,0,0,1" Text="{Binding CustomTypeInfo.CustomTypeName}"/>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -35,46 +38,55 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Margin="0,0,5,0">
                 <Label Padding="0,0,0,1">Server:</Label>
-                <TextBox Name="TxtServer" Padding="2" Margin="0,0,0,1" Text="{Binding ConnectionInfo.DatabaseInfo.Server}" />
+                <TextBox Padding="2" Margin="0,0,0,1" Text="{Binding Server}" />
             </StackPanel>
             <StackPanel Grid.Column="1" Margin="5,0,0,0">
                 <Label Padding="0,0,0,1">Database:</Label>
-                <TextBox Name="TxtDatabase" Padding="2" Margin="0,0,0,1" Text="{Binding ConnectionInfo.DatabaseInfo.Database}" />
+                <TextBox Padding="2" Margin="0,0,0,1" Text="{Binding Database}" />
             </StackPanel>
         </Grid>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*"></ColumnDefinition>
-                <ColumnDefinition Width="30*"></ColumnDefinition>
-                <ColumnDefinition Width="30*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0">
-                <TextBlock TextWrapping="Wrap">Integrated security will be used by default.</TextBlock>
-                <CheckBox Margin="0,5,0,5" IsChecked="{Binding ConnectionInfo.DatabaseInfo.SqlSecurity}" VerticalAlignment="Bottom">Use username/password</CheckBox>
+            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                <Label Padding="0,0,0,1">Authentication:</Label>
+                <ComboBox Margin="0,0,0,1" ItemsSource="{Binding AuthNames}" SelectedValue="{Binding AuthenticationMethod}" />
             </StackPanel>
-            <StackPanel Grid.Column="1" Margin="0,0,5,0" Visibility="{Binding ConnectionInfo.DatabaseInfo.SqlSecurity, Converter={StaticResource BoolToVis}}" >
+            <StackPanel Grid.Column="1" Margin="0,0,5,0" Visibility="{Binding DisplayUsername, Converter={StaticResource BoolToVis}}" >
                 <Label Padding="0,0,0,1">User name:</Label>
-                <TextBox Name="TxtUsername" Padding="2" Margin="0,0,0,1" Text="{Binding ConnectionInfo.DatabaseInfo.UserName}"/>
+                <TextBox Padding="2" Margin="0,0,0,1" Text="{Binding UserName}"/>
             </StackPanel>
-            <StackPanel Grid.Column="2" Margin="5,0,0,0" Visibility="{Binding ConnectionInfo.DatabaseInfo.SqlSecurity, Converter={StaticResource BoolToVis}}">
+            <StackPanel Grid.Column="2" Margin="5,0,0,0" Visibility="{Binding DisplayPassword, Converter={StaticResource BoolToVis}}">
                 <Label Padding="0,0,0,1">Password:</Label>
                 <PasswordBox Name="TxtPassword" Padding="2" Margin="0,0,0,1" />
             </StackPanel>
         </Grid>
 
         <DockPanel Margin="0,10,0,0">
-            <CheckBox Margin="0,0,10,0" IsChecked="{Binding ConnectionInfo.Persist}" VerticalAlignment="Center">Remember this connection</CheckBox>
-            <CheckBox IsChecked="{Binding ConnectionInfo.IsProduction}" VerticalAlignment="Center">Contains production data</CheckBox>
+            <CheckBox Margin="0,0,10,0" IsChecked="{Binding Trust}" VerticalAlignment="Center">Trust server certificate</CheckBox>
+            <CheckBox Margin="0,0,10,0" IsChecked="{Binding Encrypt}" VerticalAlignment="Center">Encrypt</CheckBox>
+        </DockPanel>
+
+        <GroupBox Header="Connection string preview:" Margin="0,5,0,0" Padding="5">
+            <TextBlock Text="{Binding PreviewConnectionString}" TextWrapping="Wrap" />
+        </GroupBox>
+
+        <DockPanel Margin="0,10,0,0">
+            <CheckBox Margin="0,0,10,0" IsChecked="{Binding Persist}" VerticalAlignment="Center">Remember this connection</CheckBox>
+            <CheckBox IsChecked="{Binding IsProduction}" VerticalAlignment="Center">Contains production data</CheckBox>
         </DockPanel>
 
         <Label Padding="0,10,0,2">Friendly name for this connection (optional):</Label>
-        <TextBox Name="TxtFriendlyName" Padding="2" Text="{Binding ConnectionInfo.DisplayName}" />
+        <TextBox Padding="2" Text="{Binding DisplayName}" />
 
         <DockPanel LastChildFill="False" Margin="0,15,0,0">
-			<Button Name="BtnCancel" DockPanel.Dock="Right" Content="Cancel" Margin="6,0,0,0" Padding="10,3" MinWidth="90" IsCancel="True" TabIndex="3" />
-            <Button Name="BtnOk" DockPanel.Dock="Right" Content="OK" Margin="6,0,0,0" Padding="10,3" MinWidth="90" IsDefault="True" TabIndex="2" Click="ClickOk" />
-            <Button Name="BtnTest" DockPanel.Dock="Right" Content="Test" Margin="6,0,0,0" Padding="10,3" MinWidth="90" TabIndex="1" Click="ClickTest" />
+			<Button DockPanel.Dock="Right" Content="Cancel" Margin="6,0,0,0" Padding="10,3" MinWidth="90" IsCancel="True" TabIndex="3" />
+            <Button DockPanel.Dock="Right" Content="OK" Margin="6,0,0,0" Padding="10,3" MinWidth="90" IsDefault="True" TabIndex="2" Click="ClickOk" />
+            <Button DockPanel.Dock="Right" Content="Test" Margin="6,0,0,0" Padding="10,3" MinWidth="90" TabIndex="1" Click="ClickTest" />
         </DockPanel>
 	</StackPanel>
 </Window>
