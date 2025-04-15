@@ -143,7 +143,7 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
                             case DateTimeOffset dto:
                                 formatValue = "'" + dto.ToString("yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                                 break;
-                            case SqlDateTime sdt:
+                            case SqlDateTime sdt when !sdt.IsNull:
                                 formatValue = "'" + sdt.Value.ToString(par.SqlDbType == SqlDbType.Date ? "yyyyMMdd" : "yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                                 break;
                             default:

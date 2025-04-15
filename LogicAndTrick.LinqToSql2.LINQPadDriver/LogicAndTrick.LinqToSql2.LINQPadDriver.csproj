@@ -13,11 +13,11 @@
 		<PackageProjectUrl>https://github.com/LogicAndTrick/linqtosql-linqpad-driver</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/LogicAndTrick/linqtosql-linqpad-driver</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
-		<PackageReleaseNotes>Move from System.Data.SqlClient to Microsoft.Data.SqlClient, move to net60 and net48, fix date formatting on date parameters to work in all locales, add MS Entra authentication options</PackageReleaseNotes>
+		<PackageReleaseNotes>Fix when printing null datetimes</PackageReleaseNotes>
 		<Authors>LogicAndTrick</Authors>
-		<AssemblyVersion>2.0.0.0</AssemblyVersion>
-		<FileVersion>2.0.0.0</FileVersion>
-		<Version>2.0.0</Version>
+		<AssemblyVersion>2.0.1.0</AssemblyVersion>
+		<FileVersion>2.0.1.0</FileVersion>
+		<Version>2.0.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
