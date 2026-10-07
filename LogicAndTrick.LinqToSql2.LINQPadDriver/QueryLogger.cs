@@ -114,8 +114,17 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
             {
                 switch (par.SqlDbType)
                 {
+                    case SqlDbType.Decimal:
+                        var dPrecision = par.Precision > 0 ? par.Precision : 18;
+                        var dScale = par.Scale >= 0 ? par.Scale : 0;
+                        formatType = $"{formatType}({dPrecision},{dScale})";
+                        formatValue = Convert.ToString(par.SqlValue, CultureInfo.InvariantCulture);
+                        break;
                     case SqlDbType.Binary:
                     case SqlDbType.VarBinary:
+                        formatType = par.Size >= 0 ? $"{formatType}({par.Size})" : $"{formatType}(MAX)";
+                        formatValue = "NULL -- Binary data not included";
+                        break;
                     case SqlDbType.Image:
                         formatValue = "NULL -- Binary data not included";
                         break;
@@ -123,6 +132,9 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
                     case SqlDbType.NChar:
                     case SqlDbType.VarChar:
                     case SqlDbType.NVarChar:
+                        formatType = par.Size >= 0 ? $"{formatType}({par.Size})" : $"{formatType}(MAX)";
+                        formatValue = "'" + Convert.ToString(par.SqlValue).Replace("'", "''") + "'";
+                        break;
                     case SqlDbType.Text:
                     case SqlDbType.NText:
                     case SqlDbType.UniqueIdentifier:
@@ -137,6 +149,14 @@ namespace LogicAndTrick.LinqToSQL2.LINQPadDriver
                     case SqlDbType.Time:
                         switch (par.SqlValue)
                         {
+#if NET6_0_OR_GREATER
+                            case DateOnly dto:
+                                formatValue = "'" + dto.ToString("yyyyMMdd") + "'";
+                                break;
+                            case TimeOnly too:
+                                formatValue = "'" + too.ToString("HH:mm:ss.fff") + "'";
+                                break;
+#endif
                             case DateTime dt:
                                 formatValue = "'" + dt.ToString(par.SqlDbType == SqlDbType.Date ? "yyyyMMdd" : "yyyy-MM-dd'T'HH:mm:ss.fff") + "'";
                                 break;
